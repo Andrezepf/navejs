@@ -97,9 +97,9 @@ const criaTiros = (posicaoLeftTiro, posicaoTopTiro) => {
   const tiro = document.createElement("div");
   tiro.className = "tiro";
   tiro.style.position = "absolute";
-  tiro.style.width = "10px";
-  tiro.style.height = "10px";
-  tiro.style.backgroundColor = "red";
+  tiro.style.width = "8px";
+  tiro.style.height = "12px";
+  tiro.style.backgroundColor = "white";
   tiro.style.left = posicaoLeftTiro + "px";
   tiro.style.top = posicaoTopTiro + "px";
   cenario.appendChild(tiro);
@@ -278,8 +278,8 @@ const gameOver = () => {
 const iniciarJogo = () => {
   document.addEventListener("keydown", teclaPressionada);
   document.addEventListener("keyup", teclaSolta);
-  checaMoveNave = setInterval(moveNave, 50);
-  checaMoveTiros = setInterval(moveTiros, 50);
+  checaMoveNave = setInterval(moveNave, 20);
+  checaMoveTiros = setInterval(moveTiros, 40);
   checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
   checaColisao = setInterval(colisao, 10);
   checaNaveInimigas = setInterval(naveInimigas, 1000);
