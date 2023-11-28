@@ -39,11 +39,7 @@ const teclaPressionada = (tecla) => {
     direcaoHorizontal = 1;
   } else if (tecla.key === "ArrowLeft") {
     direcaoHorizontal = -1;
-  } else if (tecla.key === "ArrowDown") {
-    direcaoVertical = 1;
-  } else if (tecla.key === "ArrowUp") {
-    direcaoVertical = -1;
-  }
+  } 
 }
 
 const teclaSolta = (tecla) => {
@@ -62,13 +58,9 @@ const moveNave = () => {
   } else if (posicaoHorizontal + larguraNave > larguraCenario) {
     posicaoHorizontal = larguraCenario - larguraNave;
   }
-  if (posicaoVertical < 0) {
-    posicaoVertical = 0;
-  } else if (posicaoVertical + alturaCeNave > alturaCenario) {
-    posicaoVertical = alturaCenario - alturaCeNave;
-  }
+  
   nave.style.left = posicaoHorizontal + "px";
-  nave.style.top = posicaoVertical + "px";
+
 }
 
 const atirar = () => {
@@ -99,7 +91,7 @@ const criaTiros = (posicaoLeftTiro, posicaoTopTiro) => {
   tiro.style.position = "absolute";
   tiro.style.width = "8px";
   tiro.style.height = "12px";
-  tiro.style.backgroundColor = "white";
+  tiro.style.backgroundColor = "black";
   tiro.style.left = posicaoLeftTiro + "px";
   tiro.style.top = posicaoTopTiro + "px";
   cenario.appendChild(tiro);
@@ -138,7 +130,7 @@ const naveInimigas = () => {
   inimigo.setAttribute("data-vida", 5);
   inimigo.style.width = "100px";
   inimigo.style.height = "100px";
-  inimigo.style.backgroundImage = "url(/imagens/inimigo.gif)";
+  inimigo.style.backgroundImage = "url(/imagens/ufo.png)";
   inimigo.style.backgroundPosition = "center";
   inimigo.style.backgroundRepeat = "no-repeat";
   inimigo.style.backgroundSize = "contain";
@@ -285,7 +277,7 @@ const iniciarJogo = () => {
   checaNaveInimigas = setInterval(naveInimigas, 1000);
   checaTiros = setInterval(atirar, 10);
   botaoIniciar.style.display = "none";
-  cenario.style.animation = "animarCenario 10s infinite linear";
+  
   audioJogo.loop = true;
   audioJogo.play();
 }
