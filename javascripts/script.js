@@ -9,7 +9,7 @@ const larguraCenario = cenario.offsetWidth;
 const alturaCenario = cenario.offsetHeight;
 
 const larguraNave = nave.offsetWidth;
-const alturaCeNave = nave.offsetHeight;
+const alturaNave = nave.offsetHeight;
 
 const velocidadeNave = 15;
 const velocidadeTiro = 20;
@@ -30,7 +30,7 @@ let checaColisao;
 let checaTiros;
 
 let posicaoHorizontal = larguraCenario / 2 - 50;
-let posicaoVertical = alturaCenario - alturaCeNave;
+let posicaoVertical = alturaCenario - alturaNave;
 let direcaoHorizontal = 0;
 let direcaoVertical = 0;
 
@@ -140,13 +140,13 @@ const naveInimigas = () => {
 }
 
 const moveNaveInimigas = () => {
-  const navaInimigas = document.querySelectorAll(".inimigo");
-  for (let i = 0; i < navaInimigas.length; i++) {
-    if (navaInimigas[i]) {
-      let posicaoTopNaveInimiga = navaInimigas[i].offsetTop;
-      let posicaoLeftNaveInimiga = navaInimigas[i].offsetLeft;
+  const naveInimigas = document.querySelectorAll(".inimigo");
+  for (let i = 0; i < naveInimigas.length; i++) {
+    if (naveInimigas[i]) {
+      let posicaoTopNaveInimiga = naveInimigas[i].offsetTop;
+      let posicaoLeftNaveInimiga = naveInimigas[i].offsetLeft;
       posicaoTopNaveInimiga += velocidadeNaveInimigas;
-      navaInimigas[i].style.top = posicaoTopNaveInimiga + "px";
+      naveInimigas[i].style.top = posicaoTopNaveInimiga + "px";
       if (posicaoTopNaveInimiga > alturaCenario) {
         vidaAtual -= 5;
         vida.textContent = `Vida: ${vidaAtual}`;
@@ -154,7 +154,7 @@ const moveNaveInimigas = () => {
         if (vidaAtual <= 0) {
           gameOver();
         }
-        navaInimigas[i].remove();
+        naveInimigas[i].remove();
       } 
     }
   }
