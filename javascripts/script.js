@@ -331,12 +331,13 @@ const colisaoIcone = () => {
           iconePoder.remove();
           velocidadeNave += 5;
           velocidadeTiro += 20;
-          nave.style.backgroundImage = "url(/imagens/tanque2.png)";
+          nave.style.backgroundImage = "url(/imagens/tanque2.png)";         
           setTimeout(() => {
             velocidadeNave -= 5;
             velocidadeTiro -= 20;
             nave.style.backgroundImage = "url(/imagens/tanque.png)";
           }, 12000);
+          audioSuper();
         }
       }
     })
@@ -385,6 +386,16 @@ const audioExplosoes = () => {
   cenario.appendChild(audioExplosaoNaveInimiga);
   audioExplosaoNaveInimiga.addEventListener("ended", () => {
     audioExplosaoNaveInimiga.remove();
+  })
+}
+const audioSuper = () => {
+  const audioSuperIcone = document.createElement("audio");
+  audioSuperIcone.className = "audiosuper";
+  audioSuperIcone.setAttribute("src", "/audios/super.mp3");
+  audioSuperIcone.play();
+  cenario.appendChild(audioSuperIcone);
+  audioSuperIcone.addEventListener("ended", () => {
+    audioSuperIcone.remove();
   })
 }
 
