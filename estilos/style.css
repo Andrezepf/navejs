@@ -80,6 +80,75 @@
     padding: 10px 20px;
 }
 
+#pontos {
+    text-align: left;
+    position: absolute;
+    color: black;
+    top: 5%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    display: block;
+    margin: 0px;
+}
+
+#maxpontos {
+    text-align: left;
+    position: absolute;
+    color: black;
+    top: 10%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    display: block;
+    margin: 0px;
+}
+
+#facil {
+    position: absolute;
+    color: black;
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#normal {
+    position: absolute;
+    color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#dificil {
+    position: absolute;
+    color: black;
+    top: 50%;
+    left: 61%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#dificuldade {
+    position: absolute;
+    color: black;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
 div {
     border-radius: 5px;
 }

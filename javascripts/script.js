@@ -1,5 +1,9 @@
 const botaoIniciar = document.getElementById("iniciar");
 const botaoReiniciar = document.getElementById("reiniciar");
+const dificuldade = document.getElementById("dificuldade");
+const difFacil = document.getElementById("facil");
+const difNormal = document.getElementById("normal");
+const difDificil = document.getElementById("dificil");
 const perdeu = document.getElementById("perdeu");
 const cenario = document.getElementById("cenario");
 const nave = document.getElementById("nave");
@@ -16,7 +20,7 @@ const alturaNave = nave.offsetHeight;
 
 const velocidadeNave = 15;
 const velocidadeTiro = 20;
-const velocidadeNaveInimigas = 6;
+let velocidadeNaveInimigas = 6;
 
 let estaAtirando = false;
 
@@ -25,6 +29,7 @@ let tiroAtual = 0;
 let vidaAtual = 100;
 let pontosAtual = 0;
 let maxPontosAtual = 0;
+let dificuldadeJogo;
 
 let checaMoveNaveInimigas;
 let checaNaveInimigas;
@@ -32,6 +37,7 @@ let checaMoveTiros;
 let checaMoveNave;
 let checaColisao;
 let checaTiros;
+let checaAumentaVel;
 
 let posicaoHorizontal = larguraCenario / 2 - 50;
 let posicaoVertical = alturaCenario - alturaNave;
@@ -41,6 +47,10 @@ let direcaoVertical = 0;
 botaoReiniciar.style.display = "none";
 perdeu.style.display = "none";
 maxPontos.style.display = "none";
+dificuldade.style.display = "none";
+difFacil.style.display = "none";
+difNormal.style.display = "none";
+difDificil.style.display = "none";
 
 const teclaPressionada = (tecla) => {
   if (tecla.key === "ArrowRight") {
@@ -269,25 +279,38 @@ const gameOver = () => {
 const iniciarJogo = () => {
   document.addEventListener("keydown", teclaPressionada);
   document.addEventListener("keyup", teclaSolta);
-  checaMoveNave = setInterval(moveNave, 20);
-  checaMoveTiros = setInterval(moveTiros, 40);
-  checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
-  checaColisao = setInterval(colisao, 10);
-  checaNaveInimigas = setInterval(naveInimigas, 1000);
+  if (dificuldadeJogo == 0){
+    checaMoveNave = setInterval(moveNave, 20);
+    checaMoveTiros = setInterval(moveTiros, 40);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 55);
+    checaNaveInimigas = setInterval(naveInimigas, 1250);
+    checaAumentaVel = setInterval(aumentaVel, 20000);
+  } else if (dificuldadeJogo == 1){
+    checaMoveNave = setInterval(moveNave, 20);
+    checaMoveTiros = setInterval(moveTiros, 40);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
+    checaNaveInimigas = setInterval(naveInimigas, 1000);
+    checaAumentaVel = setInterval(aumentaVel, 15000);
+  } else if (dificuldadeJogo == 2){
+    checaMoveNave = setInterval(moveNave, 12);
+    checaMoveTiros = setInterval(moveTiros, 30);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 40);
+    checaNaveInimigas = setInterval(naveInimigas, 750);
+    checaAumentaVel = setInterval(aumentaVel, 10000);    
+  }
   checaTiros = setInterval(atirar, 10);
-  botaoIniciar.style.display = "none";
-  
+  checaColisao = setInterval(colisao, 10);
   audioJogo.loop = true;
   audioJogo.play();
 }
 
 const reiniciarJogo = () => {
-  document.addEventListener("keydown", teclaPressionada);
+  cenario.appendChild(nave);
   document.addEventListener("keyup", teclaSolta);
+  document.addEventListener("keydown", teclaPressionada);
   botaoReiniciar.style.display = "none";
   perdeu.style.display = "none";
   maxPontos.style.display = "block";
-  cenario.appendChild(nave);
   if (pontosAtual > maxPontosAtual){
     maxPontosAtual = pontosAtual;
   }
@@ -295,17 +318,34 @@ const reiniciarJogo = () => {
   tiroAtual = 0;
   vidaAtual = 100;
   pontosAtual = 0;
+  velocidadeNaveInimigas = 6;
   vida.textContent = `Cidade: ${vidaAtual}%`;
   pontos.textContent = `Naves abatidas: ${pontosAtual}`;
   maxPontos.textContent = `Melhor Pontuação: ${maxPontosAtual}`;
   posicaoHorizontal = larguraCenario / 2 - 50;
   posicaoVertical = alturaCenario - alturaNave;
-  checaMoveNave = setInterval(moveNave, 20);
-  checaMoveTiros = setInterval(moveTiros, 40);
-  checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
-  checaColisao = setInterval(colisao, 10);
-  checaNaveInimigas = setInterval(naveInimigas, 1000);
+  
+  if (dificuldadeJogo == 0){
+    checaMoveNave = setInterval(moveNave, 20);
+    checaMoveTiros = setInterval(moveTiros, 40);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 55);
+    checaNaveInimigas = setInterval(naveInimigas, 1250);
+    checaAumentaVel = setInterval(aumentaVel, 20000);
+  } else if (dificuldadeJogo == 1){
+    checaMoveNave = setInterval(moveNave, 20);
+    checaMoveTiros = setInterval(moveTiros, 40);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
+    checaNaveInimigas = setInterval(naveInimigas, 1000);
+    checaAumentaVel = setInterval(aumentaVel, 15000);
+  } else if (dificuldadeJogo == 2){
+    checaMoveNave = setInterval(moveNave, 12);
+    checaMoveTiros = setInterval(moveTiros, 30);
+    checaMoveNaveInimigas = setInterval(moveNaveInimigas, 40);
+    checaNaveInimigas = setInterval(naveInimigas, 750);
+    checaAumentaVel = setInterval(aumentaVel, 10000);   
+  }
   checaTiros = setInterval(atirar, 10);
+  checaColisao = setInterval(colisao, 10);
   const todosTiros = document.querySelectorAll(".tiro");
   todosTiros.forEach((tiro) => {
     cenario.removeChild(tiro);
@@ -313,4 +353,43 @@ const reiniciarJogo = () => {
   
   audioJogo.loop = true;
   audioJogo.play();
+}
+
+const selecionaDificuldade = () => {
+  botaoIniciar.style.display = "none";
+  dificuldade.style.display = "block";
+  difFacil.style.display = "block";
+  difNormal.style.display = "block";
+  difDificil.style.display = "block";
+}
+
+const escFacil = () => {
+  dificuldadeJogo = 0;
+  difFacil.style.display = "none";
+  dificuldade.style.display = "none";
+  difNormal.style.display = "none";
+  difDificil.style.display = "none";
+  iniciarJogo();
+}
+
+const escNormal = () => {
+  dificuldadeJogo = 1;
+  difFacil.style.display = "none";
+  dificuldade.style.display = "none";
+  difNormal.style.display = "none";
+  difDificil.style.display = "none";
+  iniciarJogo();
+}
+
+const escDificil = () => {
+  dificuldadeJogo = 2;
+  difFacil.style.display = "none";
+  dificuldade.style.display = "none";
+  difNormal.style.display = "none";
+  difDificil.style.display = "none";
+  iniciarJogo();
+}
+
+const aumentaVel = () => {
+  velocidadeNaveInimigas += 1;
 }
