@@ -18,8 +18,8 @@ const alturaCenario = cenario.offsetHeight;
 const larguraNave = nave.offsetWidth;
 const alturaNave = nave.offsetHeight;
 
-const velocidadeNave = 15;
-const velocidadeTiro = 20;
+let velocidadeNave = 15;
+let velocidadeTiro = 20;
 let velocidadeNaveInimigas = 6;
 
 let estaAtirando = false;
@@ -38,6 +38,9 @@ let checaMoveNave;
 let checaColisao;
 let checaTiros;
 let checaAumentaVel;
+let checaMoveIconePoder;
+let checaIconePoder;
+let checaColisaoIcone;
 
 let posicaoHorizontal = larguraCenario / 2 - 50;
 let posicaoVertical = alturaCenario - alturaNave;
@@ -178,6 +181,37 @@ const moveNaveInimigas = () => {
   }
 }
 
+const iconePoder = () => {
+  const poder = document.createElement("div");
+  poder.className = "poder";
+  poder.style.position = "absolute";
+  poder.setAttribute("data-vida", 1);
+  poder.style.width = "50px";
+  poder.style.height = "50px";
+  poder.style.backgroundImage = "url(/imagens/poder.png)";
+  poder.style.backgroundPosition = "center";
+  poder.style.backgroundRepeat = "no-repeat";
+  poder.style.backgroundSize = "contain";
+  poder.style.left = Math.floor(Math.random() * (larguraCenario - larguraNave)) + "px";
+  poder.style.top = "-100px";
+  cenario.appendChild(poder);
+}
+
+
+const moveIconePoder = () => {
+  const iconePoder = document.querySelectorAll(".poder");
+  for (let i = 0; i < iconePoder.length; i++) {
+    if (iconePoder[i]) {
+      let posicaoTopIconePoder = iconePoder[i].offsetTop;
+      posicaoTopIconePoder += velocidadeNaveInimigas;
+      iconePoder[i].style.top = posicaoTopIconePoder + "px";
+      if (posicaoTopIconePoder > alturaCenario) {
+        iconePoder[i].remove();
+      } 
+    }
+  }
+}
+
 const colisao = () => {
   const todasNavesInimigas = document.querySelectorAll(".inimigo");
   const todosTiros = document.querySelectorAll(".tiro");
@@ -203,6 +237,36 @@ const colisao = () => {
           naveInimigaDestruida(posicaoNaveInimigaLeft, posicaoNaveInimigaTop);
         } else {
           naveInimiga.setAttribute("data-vida", vidaAtualNaveInimiga);
+        }
+      }
+    })
+  })
+}
+
+const colisaoIcone = () => {
+  const todosIconesPoder = document.querySelectorAll(".poder");
+  const todosTiros = document.querySelectorAll(".tiro");
+  todosIconesPoder.forEach((iconePoder) => {
+    todosTiros.forEach((tiro) => {
+      const colisaoIconePoder = iconePoder.getBoundingClientRect();
+      const colisaoTiro = tiro.getBoundingClientRect();
+      let vidaAtualIconePoder = parseInt(iconePoder.getAttribute("data-vida"));
+      if (
+        colisaoIconePoder.left < colisaoTiro.right &&
+        colisaoIconePoder.right > colisaoTiro.left &&
+        colisaoIconePoder.top < colisaoTiro.bottom &&
+        colisaoIconePoder.bottom > colisaoTiro.top
+      ) {
+        vidaAtualIconePoder--;
+        tiro.remove();
+        if (vidaAtualIconePoder <= 0) {
+          iconePoder.remove();
+          velocidadeNave += 5;
+          velocidadeTiro += 20;
+          setTimeout(() => {
+            velocidadeNave -= 5;
+            velocidadeTiro -= 20;
+          }, 12000);
         }
       }
     })
@@ -262,6 +326,8 @@ const gameOver = () => {
   clearInterval(checaMoveTiros);
   clearInterval(checaMoveNave);
   clearInterval(checaColisao);
+  clearInterval(checaMoveIconePoder);
+  clearInterval(checaIconePoder);
   perdeu.style.display = "block";
   botaoReiniciar.style.display = "block";
   cenario.appendChild(perdeu);
@@ -269,6 +335,10 @@ const gameOver = () => {
   const navesInimigas = document.querySelectorAll(".inimigo");
   navesInimigas.forEach((inimigos) => {
     inimigos.remove();
+  });
+  const iconesPoder = document.querySelectorAll(".poder");
+  iconesPoder.forEach((poderes) => {
+    poderes.remove();
   });
   const todosTiros = document.querySelectorAll(".tiro");
   todosTiros.forEach((tiro) => {
@@ -298,8 +368,11 @@ const iniciarJogo = () => {
     checaNaveInimigas = setInterval(naveInimigas, 750);
     checaAumentaVel = setInterval(aumentaVel, 10000);    
   }
+  checaMoveIconePoder = setInterval (moveIconePoder, 40);
+  checaIconePoder = setInterval (iconePoder, 30000);
   checaTiros = setInterval(atirar, 10);
   checaColisao = setInterval(colisao, 10);
+  checaColisaoIcone = setInterval(colisaoIcone, 10);
   audioJogo.loop = true;
   audioJogo.play();
 }
@@ -344,8 +417,11 @@ const reiniciarJogo = () => {
     checaNaveInimigas = setInterval(naveInimigas, 750);
     checaAumentaVel = setInterval(aumentaVel, 10000);   
   }
+  checaMoveIconePoder = setInterval (moveIconePoder, 40);
+  checaIconePoder = setInterval (iconePoder, 30000);
   checaTiros = setInterval(atirar, 10);
   checaColisao = setInterval(colisao, 10);
+  checaColisaoIcone = setInterval(colisaoIcone, 10);
   const todosTiros = document.querySelectorAll(".tiro");
   todosTiros.forEach((tiro) => {
     cenario.removeChild(tiro);
