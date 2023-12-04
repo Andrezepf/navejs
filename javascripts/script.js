@@ -33,6 +33,8 @@ let dificuldadeJogo;
 
 let checaMoveNaveInimigas;
 let checaNaveInimigas;
+let checaMoveNaveInimigasEsp;
+let checaNaveInimigasEsp;
 let checaMoveTiros;
 let checaMoveNave;
 let checaColisao;
@@ -41,6 +43,7 @@ let checaAumentaVel;
 let checaMoveIconePoder;
 let checaIconePoder;
 let checaColisaoIcone;
+let checaColisaoEsp;
 
 let posicaoHorizontal = larguraCenario / 2 - 50;
 let posicaoVertical = alturaCenario - alturaNave;
@@ -180,6 +183,41 @@ const moveNaveInimigas = () => {
     }
   }
 }
+const naveInimigasEsp = () => {
+  const inimigoEsp = document.createElement("div");
+  inimigoEsp.className = "inimigoEsp";
+  inimigoEsp.style.position = "absolute";
+  inimigoEsp.setAttribute("data-vida", 7);
+  inimigoEsp.style.width = "100px";
+  inimigoEsp.style.height = "100px";
+  inimigoEsp.style.backgroundImage = "url(/imagens/ufo2.png)";
+  inimigoEsp.style.backgroundPosition = "center";
+  inimigoEsp.style.backgroundRepeat = "no-repeat";
+  inimigoEsp.style.backgroundSize = "contain";
+  inimigoEsp.style.left = Math.floor(Math.random() * (larguraCenario - larguraNave)) + "px";
+  inimigoEsp.style.top = "-100px";
+  cenario.appendChild(inimigoEsp);
+}
+const moveNaveInimigasEsp = () => {
+  const naveInimigasEsp = document.querySelectorAll(".inimigoEsp");
+  for (let i = 0; i < naveInimigasEsp.length; i++) {
+    if (naveInimigasEsp[i]) {
+      let posicaoTopNaveInimiga = naveInimigasEsp[i].offsetTop;
+      let posicaoLeftNaveInimiga = naveInimigasEsp[i].offsetLeft;
+      posicaoTopNaveInimiga += velocidadeNaveInimigas;
+      naveInimigasEsp[i].style.top = posicaoTopNaveInimiga + "px";
+      if (posicaoTopNaveInimiga > alturaCenario) {
+        vidaAtual -= 10;
+        vida.textContent = `Cidade: ${vidaAtual}%`;
+        explosaoNaveInimigaDestruida(posicaoLeftNaveInimiga);
+        if (vidaAtual <= 0) {
+          gameOver();
+        }
+        naveInimigasEsp[i].remove();
+      } 
+    }
+  }
+}
 
 const iconePoder = () => {
   const poder = document.createElement("div");
@@ -237,6 +275,36 @@ const colisao = () => {
           naveInimigaDestruida(posicaoNaveInimigaLeft, posicaoNaveInimigaTop);
         } else {
           naveInimiga.setAttribute("data-vida", vidaAtualNaveInimiga);
+        }
+      }
+    })
+  })
+}
+const colisaoEsp = () => {
+  const todasNavesInimigasEsp = document.querySelectorAll(".inimigoEsp");
+  const todosTiros = document.querySelectorAll(".tiro");
+  todasNavesInimigasEsp.forEach((naveInimigaEsp) => {
+    todosTiros.forEach((tiro) => {
+      const colisaoNaveInimigaEsp = naveInimigaEsp.getBoundingClientRect();
+      const colisaoTiro = tiro.getBoundingClientRect();
+      const posicaoNaveInimigaEspLeft = naveInimigaEsp.offsetLeft;
+      const posicaoNaveInimigaEspTop = naveInimigaEsp.offsetTop;
+      let vidaAtualNaveInimigaEsp = parseInt(naveInimigaEsp.getAttribute("data-vida"));
+      if (
+        colisaoNaveInimigaEsp.left < colisaoTiro.right &&
+        colisaoNaveInimigaEsp.right > colisaoTiro.left &&
+        colisaoNaveInimigaEsp.top < colisaoTiro.bottom &&
+        colisaoNaveInimigaEsp.bottom > colisaoTiro.top
+      ) {
+        vidaAtualNaveInimigaEsp--;
+        tiro.remove();
+        if (vidaAtualNaveInimigaEsp === 0) {
+          pontosAtual += 5;
+          pontos.textContent = `Naves abatidas: ${pontosAtual}`;
+          naveInimigaEsp.remove();
+          naveInimigaDestruida(posicaoNaveInimigaEspLeft, posicaoNaveInimigaEspTop);
+        } else {
+          naveInimigaEsp.setAttribute("data-vida", vidaAtualNaveInimigaEsp);
         }
       }
     })
@@ -325,6 +393,8 @@ const gameOver = () => {
   document.removeEventListener("keyup", teclaSolta);
   clearInterval(checaMoveNaveInimigas);
   clearInterval(checaNaveInimigas);
+  clearInterval(checaMoveNaveInimigasEsp);
+  clearInterval(checaNaveInimigasEsp);
   clearInterval(checaMoveTiros);
   clearInterval(checaMoveNave);
   clearInterval(checaColisao);
@@ -337,6 +407,10 @@ const gameOver = () => {
   const navesInimigas = document.querySelectorAll(".inimigo");
   navesInimigas.forEach((inimigos) => {
     inimigos.remove();
+  });
+  const navesInimigasEsp = document.querySelectorAll(".inimigoEsp");
+  navesInimigasEsp.forEach((inimigosEsp) => {
+    inimigosEsp.remove();
   });
   const iconesPoder = document.querySelectorAll(".poder");
   iconesPoder.forEach((poderes) => {
@@ -356,24 +430,31 @@ const iniciarJogo = () => {
     checaMoveTiros = setInterval(moveTiros, 40);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 55);
     checaNaveInimigas = setInterval(naveInimigas, 1250);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 50);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 35000);
     checaAumentaVel = setInterval(aumentaVel, 20000);
   } else if (dificuldadeJogo == 1){
     checaMoveNave = setInterval(moveNave, 20);
     checaMoveTiros = setInterval(moveTiros, 40);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
     checaNaveInimigas = setInterval(naveInimigas, 1000);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 45);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 40000);
     checaAumentaVel = setInterval(aumentaVel, 15000);
   } else if (dificuldadeJogo == 2){
     checaMoveNave = setInterval(moveNave, 12);
     checaMoveTiros = setInterval(moveTiros, 30);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 40);
     checaNaveInimigas = setInterval(naveInimigas, 750);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 35);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 45000);
     checaAumentaVel = setInterval(aumentaVel, 10000);    
   }
   checaMoveIconePoder = setInterval (moveIconePoder, 40);
   checaIconePoder = setInterval (iconePoder, 30000);
   checaTiros = setInterval(atirar, 10);
   checaColisao = setInterval(colisao, 10);
+  checaColisaoEsp = setInterval(colisaoEsp, 10);
   checaColisaoIcone = setInterval(colisaoIcone, 10);
   audioJogo.loop = true;
   audioJogo.play();
@@ -405,24 +486,31 @@ const reiniciarJogo = () => {
     checaMoveTiros = setInterval(moveTiros, 40);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 55);
     checaNaveInimigas = setInterval(naveInimigas, 1250);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 50);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 35000);
     checaAumentaVel = setInterval(aumentaVel, 20000);
   } else if (dificuldadeJogo == 1){
     checaMoveNave = setInterval(moveNave, 20);
     checaMoveTiros = setInterval(moveTiros, 40);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
     checaNaveInimigas = setInterval(naveInimigas, 1000);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 45);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 40000);
     checaAumentaVel = setInterval(aumentaVel, 15000);
   } else if (dificuldadeJogo == 2){
     checaMoveNave = setInterval(moveNave, 12);
     checaMoveTiros = setInterval(moveTiros, 30);
     checaMoveNaveInimigas = setInterval(moveNaveInimigas, 40);
     checaNaveInimigas = setInterval(naveInimigas, 750);
+    checaMoveNaveInimigasEsp = setInterval(moveNaveInimigasEsp, 35);
+    checaNaveInimigasEsp = setInterval(naveInimigasEsp, 45000);
     checaAumentaVel = setInterval(aumentaVel, 10000);   
   }
   checaMoveIconePoder = setInterval (moveIconePoder, 40);
   checaIconePoder = setInterval (iconePoder, 30000);
   checaTiros = setInterval(atirar, 10);
   checaColisao = setInterval(colisao, 10);
+  checaColisaoEsp = setInterval(colisaoEsp, 10);
   checaColisaoIcone = setInterval(colisaoIcone, 10);
   const todosTiros = document.querySelectorAll(".tiro");
   todosTiros.forEach((tiro) => {
