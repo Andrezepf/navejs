@@ -5,6 +5,7 @@ const cenario = document.getElementById("cenario");
 const nave = document.getElementById("nave");
 const vida = document.getElementById("vida");
 const pontos = document.getElementById("pontos");
+const maxPontos = document.getElementById("maxpontos");
 const audioJogo = new Audio("/audios/missaoespaco.mp3");
 
 const larguraCenario = cenario.offsetWidth;
@@ -23,6 +24,7 @@ let tiroAtual = 0;
 
 let vidaAtual = 100;
 let pontosAtual = 0;
+let maxPontosAtual = 0;
 
 let checaMoveNaveInimigas;
 let checaNaveInimigas;
@@ -38,6 +40,7 @@ let direcaoVertical = 0;
 
 botaoReiniciar.style.display = "none";
 perdeu.style.display = "none";
+maxPontos.style.display = "none";
 
 const teclaPressionada = (tecla) => {
   if (tecla.key === "ArrowRight") {
@@ -283,12 +286,18 @@ const reiniciarJogo = () => {
   document.addEventListener("keyup", teclaSolta);
   botaoReiniciar.style.display = "none";
   perdeu.style.display = "none";
+  maxPontos.style.display = "block";
   cenario.appendChild(nave);
+  if (pontosAtual > maxPontosAtual){
+    maxPontosAtual = pontosAtual;
+  }
+  maxPontos.style.display = "block";
   tiroAtual = 0;
   vidaAtual = 100;
   pontosAtual = 0;
   vida.textContent = `Cidade: ${vidaAtual}%`;
   pontos.textContent = `Naves abatidas: ${pontosAtual}`;
+  maxPontos.textContent = `Melhor Pontuação: ${maxPontosAtual}`;
   posicaoHorizontal = larguraCenario / 2 - 50;
   posicaoVertical = alturaCenario - alturaNave;
   checaMoveNave = setInterval(moveNave, 20);
@@ -297,7 +306,6 @@ const reiniciarJogo = () => {
   checaColisao = setInterval(colisao, 10);
   checaNaveInimigas = setInterval(naveInimigas, 1000);
   checaTiros = setInterval(atirar, 10);
-  botaoIniciar.style.display = "none";
   const todosTiros = document.querySelectorAll(".tiro");
   todosTiros.forEach((tiro) => {
     cenario.removeChild(tiro);
