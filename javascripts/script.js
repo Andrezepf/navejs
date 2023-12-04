@@ -1,4 +1,6 @@
 const botaoIniciar = document.getElementById("iniciar");
+const botaoReiniciar = document.getElementById("reiniciar");
+const perdeu = document.getElementById("perdeu");
 const cenario = document.getElementById("cenario");
 const nave = document.getElementById("nave");
 const vida = document.getElementById("vida");
@@ -33,6 +35,9 @@ let posicaoHorizontal = larguraCenario / 2 - 50;
 let posicaoVertical = alturaCenario - alturaNave;
 let direcaoHorizontal = 0;
 let direcaoVertical = 0;
+
+botaoReiniciar.style.display = "none";
+perdeu.style.display = "none";
 
 const teclaPressionada = (tecla) => {
   if (tecla.key === "ArrowRight") {
@@ -244,19 +249,10 @@ const gameOver = () => {
   clearInterval(checaMoveTiros);
   clearInterval(checaMoveNave);
   clearInterval(checaColisao);
-  const perdeu = document.createElement("div");
-  perdeu.style.position = "absolute";
-  perdeu.innerHTML = "Game Over";
-  perdeu.style.backgroundColor = "white";
-  perdeu.style.color = "black";
-  perdeu.style.left = "50%";
-  perdeu.style.top = "50%";
-  perdeu.style.padding = "10px 20px";
-  perdeu.style.borderRadius = "5px";
-  perdeu.style.transform = "translate(-50%, -50%)";
+  perdeu.style.display = "block";
+  botaoReiniciar.style.display = "block";
   cenario.appendChild(perdeu);
   cenario.removeChild(nave);
-  cenario.style.animation = "none";
   const navesInimigas = document.querySelectorAll(".inimigo");
   navesInimigas.forEach((inimigos) => {
     inimigos.remove();
@@ -277,6 +273,35 @@ const iniciarJogo = () => {
   checaNaveInimigas = setInterval(naveInimigas, 1000);
   checaTiros = setInterval(atirar, 10);
   botaoIniciar.style.display = "none";
+  
+  audioJogo.loop = true;
+  audioJogo.play();
+}
+
+const reiniciarJogo = () => {
+  document.addEventListener("keydown", teclaPressionada);
+  document.addEventListener("keyup", teclaSolta);
+  botaoReiniciar.style.display = "none";
+  perdeu.style.display = "none";
+  cenario.appendChild(nave);
+  tiroAtual = 0;
+  vidaAtual = 100;
+  pontosAtual = 0;
+  vida.textContent = `Cidade: ${vidaAtual}%`;
+  pontos.textContent = `Naves abatidas: ${pontosAtual}`;
+  posicaoHorizontal = larguraCenario / 2 - 50;
+  posicaoVertical = alturaCenario - alturaNave;
+  checaMoveNave = setInterval(moveNave, 20);
+  checaMoveTiros = setInterval(moveTiros, 40);
+  checaMoveNaveInimigas = setInterval(moveNaveInimigas, 50);
+  checaColisao = setInterval(colisao, 10);
+  checaNaveInimigas = setInterval(naveInimigas, 1000);
+  checaTiros = setInterval(atirar, 10);
+  botaoIniciar.style.display = "none";
+  const todosTiros = document.querySelectorAll(".tiro");
+  todosTiros.forEach((tiro) => {
+    cenario.removeChild(tiro);
+  });
   
   audioJogo.loop = true;
   audioJogo.play();

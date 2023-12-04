@@ -57,6 +57,29 @@
     cursor: pointer;
 }
 
+#reiniciar {
+    position: absolute;
+    color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#perdeu {
+    position: absolute;
+    color: black;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
 div {
     border-radius: 5px;
 }
