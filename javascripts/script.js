@@ -149,7 +149,7 @@ const moveNaveInimigas = () => {
       naveInimigas[i].style.top = posicaoTopNaveInimiga + "px";
       if (posicaoTopNaveInimiga > alturaCenario) {
         vidaAtual -= 5;
-        vida.textContent = `Vida: ${vidaAtual}`;
+        vida.textContent = `Cidade: ${vidaAtual}%`;
         explosaoNaveInimigaDestruida(posicaoLeftNaveInimiga);
         if (vidaAtual <= 0) {
           gameOver();
@@ -179,8 +179,8 @@ const colisao = () => {
         vidaAtualNaveInimiga--;
         tiro.remove();
         if (vidaAtualNaveInimiga === 0) {
-          pontosAtual += 10;
-          pontos.textContent = `Pontos: ${pontosAtual}`;
+          pontosAtual += 1;
+          pontos.textContent = `Naves abatidas: ${pontosAtual}`;
           naveInimiga.remove();
           naveInimigaDestruida(posicaoNaveInimigaLeft, posicaoNaveInimigaTop);
         } else {
