@@ -263,9 +263,11 @@ const colisaoIcone = () => {
           iconePoder.remove();
           velocidadeNave += 5;
           velocidadeTiro += 20;
+          nave.style.backgroundImage = "url(/imagens/tanque2.png)";
           setTimeout(() => {
             velocidadeNave -= 5;
             velocidadeTiro -= 20;
+            nave.style.backgroundImage = "url(/imagens/tanque.png)";
           }, 12000);
         }
       }
